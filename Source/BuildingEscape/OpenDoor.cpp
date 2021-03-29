@@ -22,6 +22,7 @@ void UOpenDoor::BeginPlay()
 	TargetYaw = InitialYaw + 90.f;
 }
 
+
 // Called every frame
 void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
