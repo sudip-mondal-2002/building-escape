@@ -22,13 +22,13 @@ void UOpenDoor::BeginPlay()
 	InitialYaw = GetOwner()->GetActorRotation().Yaw;
 	CurrentYaw = InitialYaw;
 	TargetYaw += InitialYaw;
-
+	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 	if (!PressurePlate)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s has OpenDoor component but no Pressureplate selected"), *GetOwner()->GetName())
 	}
 
-	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
+	
 }
 
 // Called every frame
