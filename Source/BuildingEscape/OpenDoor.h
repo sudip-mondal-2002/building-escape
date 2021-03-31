@@ -30,11 +30,12 @@ private:
 	float InitialYaw, CurrentYaw;
 	UPROPERTY(EditAnywhere)
 	float TargetYaw = 90.f;
+	float DoorLastOpened = 0.f;
+	//Exposed to editor
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume *PressurePlate;
 	UPROPERTY(EditAnyWhere)
 	AActor *ActorThatOpens;
-	float DoorLastOpened = 0.f;
 	UPROPERTY(EditAnyWhere)
 	float DoorOpenDelay = 2.f;
 	UPROPERTY(EditAnyWhere)
