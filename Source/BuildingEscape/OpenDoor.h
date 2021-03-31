@@ -41,5 +41,4 @@ private:
 	float DoorOpenspeed = .8f;
 	UPROPERTY(EditAnyWhere)
 	float DoorCloseSpeed = 2.f;
-
 };
