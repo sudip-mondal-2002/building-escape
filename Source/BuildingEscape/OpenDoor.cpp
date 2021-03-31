@@ -1,5 +1,7 @@
 // Copyright Sudip Mondal
 
+#include "Engine/World.h"
+#include "GameFramework/PlayerController.h"
 #include "OpenDoor.h"
 #include "GameFramework/Actor.h"
 
@@ -21,23 +23,23 @@ void UOpenDoor::BeginPlay()
 	CurrentYaw = InitialYaw;
 	TargetYaw += InitialYaw;
 
-	if (! PressurePlate)
+	if (!PressurePlate)
 	{
-		UE_LOG (LogTemp, Error, TEXT("%s has OpenDoor component but no Pressureplate selected"), *GetOwner()->GetName())
+		UE_LOG(LogTemp, Error, TEXT("%s has OpenDoor component but no Pressureplate selected"), *GetOwner()->GetName())
 	}
-}
 
+	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
+}
 
 // Called every frame
 void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (PressurePlate && PressurePlate -> IsOverlappingActor(ActorThatOpens))
+	if (PressurePlate && PressurePlate->IsOverlappingActor(ActorThatOpens))
 	{
 		OpenDoor(DeltaTime);
 	}
-	
 }
 
 void UOpenDoor::OpenDoor(float DeltaTime)
