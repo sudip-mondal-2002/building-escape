@@ -1,5 +1,6 @@
 // Copyright Sudip Mondal
 
+#include "CollisionQueryParams.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
@@ -21,7 +22,11 @@ void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	if(!PhysicsHandle)
+	{
+		UE_LOG(LogTemp, Error, TEXT("No physicshandle found on %s:"),*GetOwner()->GetName());
+	}
 }
 
 // Called every frame
@@ -33,6 +38,8 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
 		OUT PlayerViewPointLocation,
 		OUT PlayerViewPointRotation);
+
+	//Draw a line to visualize the reach
 	FVector LineTraceEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector()*Reach;
 	DrawDebugLine( 
 		GetWorld(),
@@ -44,4 +51,26 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		0,
 		5.f
 	);
+
+	//Ray Cast to a certain distance
+
+	FHitResult Hit;
+	FCollisionQueryParams TraceParams(
+		FName(TEXT("")),
+		false,
+		GetOwner()
+	);
+	GetWorld()->LineTraceSingleByObjectType(
+		OUT Hit,
+		PlayerViewPointLocation,
+		LineTraceEnd,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+		TraceParams
+	);
+
+	AActor* ActorHit = Hit.GetActor();
+	if (ActorHit){
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *ActorHit->GetName());
+	}
+
 }
