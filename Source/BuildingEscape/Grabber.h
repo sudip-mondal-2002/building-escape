@@ -32,4 +32,7 @@ private:
 	void FindPhysicsHandle();
 	void SetUpInputComponent();
 	FHitResult FirstPhysicsBodyInReach() const;
+
+	FVector GetPlayerReach() const;
+	FVector GetPlayerPosition() const;
 };
