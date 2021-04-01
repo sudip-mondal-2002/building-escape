@@ -23,13 +23,15 @@ protected:
 	virtual void BeginPlay() override;
 
 	// Pointers
-	UPhysicsHandleComponent* PhysicsHandle = nullptr;	
+	UPROPERTY()
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+	UPROPERTY()
 	UInputComponent* InputComponent= nullptr;
 
 private:
 	UPROPERTY(EditAnyWhere)
 	float Reach = 100.f;
-	
+
 	void Grab();
 	void Release();
 	void FindPhysicsHandle();

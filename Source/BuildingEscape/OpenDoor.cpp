@@ -1,5 +1,6 @@
 // Copyright Sudip Mondal
 
+#include "Components/AudioComponent.h"
 #include "Components/PrimitiveComponent.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
@@ -23,10 +24,10 @@ void UOpenDoor::BeginPlay()
 	InitialYaw = GetOwner()->GetActorRotation().Yaw;
 	CurrentYaw = InitialYaw;
 	TargetYaw += InitialYaw;
-	if (!PressurePlate)
-	{
-		UE_LOG(LogTemp, Error, TEXT("%s has OpenDoor component but no Pressureplate selected"), *GetOwner()->GetName())
-	}
+
+	FindPressurePlate();
+	FindAudioComponent();
+	
 }
 
 // Called every frame
@@ -58,6 +59,13 @@ void UOpenDoor::OpenDoor(float DeltaTime)
 	FRotator DoorRotation = GetOwner()->GetActorRotation();
 	DoorRotation.Yaw = CurrentYaw;
 	GetOwner()->SetActorRotation(DoorRotation);
+
+	if (!AudioComponent) {return;}
+	if (!OpenDoorSound){
+		AudioComponent->Play();
+		OpenDoorSound=true;
+		CloseDoorSound=false;
+	}
 }
 
 void UOpenDoor::CloseDoor(float DeltaTime)
@@ -66,6 +74,14 @@ void UOpenDoor::CloseDoor(float DeltaTime)
 	FRotator DoorRotation = GetOwner()->GetActorRotation();
 	DoorRotation.Yaw = CurrentYaw;
 	GetOwner()->SetActorRotation(DoorRotation);
+
+	if (!AudioComponent) {return;}
+	if (!CloseDoorSound){
+		UE_LOG(LogTemp,Warning,TEXT("Playing CloseDoor"))
+		AudioComponent->Play();
+		OpenDoorSound=false;
+		CloseDoorSound=true;
+	}
 }
 
 float UOpenDoor::TotalMassOfActors()
@@ -78,4 +94,21 @@ float UOpenDoor::TotalMassOfActors()
 		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
 	}
 	return TotalMass;
+}
+
+void UOpenDoor::FindPressurePlate()
+{
+	if (!PressurePlate)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s has OpenDoor component but no Pressureplate selected"), *GetOwner()->GetName())
+	}
+}
+
+void UOpenDoor::FindAudioComponent()
+{
+	AudioComponent = GetOwner()->FindComponentByClass<UAudioComponent>();
+	if (!AudioComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s has OpenDoor component but no AudioComponent selected"), *GetOwner()->GetName())
+	}
 }
