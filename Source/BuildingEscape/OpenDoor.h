@@ -26,7 +26,9 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
+	// Pointers
+	UPROPERTY(EditAnywhere)
+	ATriggerVolume *PressurePlate = nullptr;
 
 private:
 	float InitialYaw, CurrentYaw;
@@ -36,10 +38,6 @@ private:
 	
 	UPROPERTY(EditAnywhere)
 	float TargetYaw = 90.f;
-	UPROPERTY(EditAnywhere)
-	ATriggerVolume *PressurePlate;
-	UPROPERTY(EditAnyWhere)
-	AActor *ActorThatOpens;
 	UPROPERTY(EditAnyWhere)
 	float DoorOpenDelay = 0.5f;
 	UPROPERTY(EditAnyWhere)
