@@ -46,4 +46,6 @@ private:
 	float DoorOpenSpeed = .8f;
 	UPROPERTY(EditAnyWhere)
 	float DoorCloseSpeed = 2.f;
+	UPROPERTY(EditAnyWhere)
+	float MassToOpen = 60.f;
 };

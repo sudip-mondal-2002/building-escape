@@ -23,7 +23,6 @@ void UOpenDoor::BeginPlay()
 	InitialYaw = GetOwner()->GetActorRotation().Yaw;
 	CurrentYaw = InitialYaw;
 	TargetYaw += InitialYaw;
-	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 	if (!PressurePlate)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s has OpenDoor component but no Pressureplate selected"), *GetOwner()->GetName())
@@ -35,7 +34,7 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (PressurePlate && TotalMassOfActors() > 50.f)
+	if (PressurePlate && TotalMassOfActors() > MassToOpen)
 	{
 		DoorLastOpened = GetWorld()->GetTimeSeconds();
 		OpenDoor(DeltaTime);
@@ -67,6 +66,7 @@ void UOpenDoor::CloseDoor(float DeltaTime)
 
 float UOpenDoor::TotalMassOfActors()
 {
+	TotalMass = 0.f;
 	TArray<AActor *> ObjectsThatOpen;
 	PressurePlate->GetOverlappingActors(OUT ObjectsThatOpen);
 	for (AActor *Actor : ObjectsThatOpen)
